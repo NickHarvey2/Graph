@@ -147,9 +147,9 @@ namespace Graphs
 				return x.Equals(y);
 			}
 
-			public int GetHashCode(T t)
+			public int GetHashCode(T obj)
 			{
-				return t.GetHashCode();
+				return obj.GetHashCode();
 			}
 		}
 

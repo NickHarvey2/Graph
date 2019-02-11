@@ -2,3 +2,5 @@
 **/obj/**
 **/*.DotSettings.*
 **/.vs*/**
+**/.sonarqube/**
+**/TestResults/**
