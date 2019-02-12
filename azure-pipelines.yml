@@ -13,12 +13,6 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: SonarSource.sonarqube.15B84CA1-B62F-4A2A-A403-89B77A063157.SonarQubePrepare@4
-  displayName: 'Prepare analysis on SonarQube'
-  inputs:
-    SonarQube: 'SonarCloud'
-    projectKey: NickHarvey2_Graph
-    projectVersion: '1.0.0'
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
 - script: dotnet test --collect:"Code Coverage" --logger trx --results-directory ./TestResults/
