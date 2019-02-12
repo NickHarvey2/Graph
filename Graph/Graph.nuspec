@@ -5,7 +5,7 @@
         <id>Graph</id>
         <version>1.0.0</version>
         <description>A generic collection data structure for tracking relationships between objects</description>
-        <license type="expression">MIT</license>
+        <license type="file">license</license>
         <authors>Nick Harvey</authors>
 
         <!-- Optional elements -->
