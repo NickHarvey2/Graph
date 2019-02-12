@@ -17,6 +17,6 @@ steps:
   displayName: 'Install sonarscanner'
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-- script: Write-Output $(token).length
+- powershell: Write-Output $(token).length
 - script: dotnet test --collect:"Code Coverage" --logger trx --results-directory ./TestResults/
   displayName: 'dotnet test'
