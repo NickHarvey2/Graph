@@ -4,3 +4,4 @@
 **/.vs*/**
 **/.sonarqube/**
 **/TestResults/**
+**/*.code-workspace
