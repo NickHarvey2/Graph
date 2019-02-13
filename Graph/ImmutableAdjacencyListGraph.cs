@@ -14,8 +14,8 @@ namespace Graphs
 		public IEnumerable<T> Vertices => ImmutableHashSet<T>.Empty.Union(_vertices);
 		public IEnumerable<Edge<T>> Edges => ImmutableHashSet<Edge<T>>.Empty.Union(_edges);
 		public IEqualityComparer<T> EqualityComparer { get; }
-		private IEqualityComparer<HashSet<T>> SetEqualityComparerObj { get; }
-		private IEqualityComparer<HashSet<Edge<T>>> EdgeSetEqualityComparer { get; }
+		private IEqualityComparer<IEnumerable<T>> SetEqualityComparerObj { get; }
+		private IEqualityComparer<IEnumerable<Edge<T>>> EdgeSetEqualityComparer { get; }
 
 		protected ImmutableAdjacencyListGraph(IEqualityComparer<T> equalityComparer = null)
 		{
@@ -65,9 +65,9 @@ namespace Graphs
 			return false;
 		}
 
-		public IEnumerable<IMutableGraph<T>> GetCycles()
+		public IEnumerable<IImmutableGraph<T>> GetCycles()
 		{
-			var cycles = new HashSet<MutableAdjacencyListGraph<T>>();
+			var cycles = new HashSet<IImmutableGraph<T>>();
 			foreach (var vertex in _vertices)
 			{
 				GetCyclesBeginningAtVertex(vertex, new Stack<T>(), cycles);
@@ -76,7 +76,7 @@ namespace Graphs
 			return cycles;
 		}
 
-		private void GetCyclesBeginningAtVertex(T currentVertex, Stack<T> traversedVertices, HashSet<MutableAdjacencyListGraph<T>> cycles)
+		private void GetCyclesBeginningAtVertex(T currentVertex, Stack<T> traversedVertices, HashSet<IImmutableGraph<T>> cycles)
 		{
 			// if the current vertex is in the list of traversed vertices, we have found a cycle
 			if (traversedVertices.Contains(currentVertex, EqualityComparer))
@@ -104,9 +104,9 @@ namespace Graphs
 				cycle.AddEdge(firstCycleVertex, cycleVertex);
 
 				// only add the cycle if it is unique
-				if (!cycles.Any(identifiedCycle => SetEqualityComparerObj.Equals(identifiedCycle._vertices, cycle._vertices) && EdgeSetEqualityComparer.Equals(identifiedCycle._edges, cycle._edges)))
+				if (!cycles.Any(identifiedCycle => SetEqualityComparerObj.Equals(identifiedCycle.Vertices, cycle.Vertices) && EdgeSetEqualityComparer.Equals(identifiedCycle.Edges, cycle.Edges)))
 				{
-					cycles.Add(cycle);
+					cycles.Add(cycle.ToImmutableGraph());
 				}
 				return;
 			}
@@ -183,7 +183,7 @@ namespace Graphs
 			}
 		}
 
-		private class SetEqualityComparer<T2> : IEqualityComparer<HashSet<T2>>
+		private class SetEqualityComparer<T2> : IEqualityComparer<IEnumerable<T2>>
 		{
 			private readonly IEqualityComparer<T2> _equalityComparer;
 
@@ -192,9 +192,9 @@ namespace Graphs
 				_equalityComparer = equalityComparer;
 			}
 
-			public bool Equals(HashSet<T2> x, HashSet<T2> y)
+			public bool Equals(IEnumerable<T2> x, IEnumerable<T2> y)
 			{
-				if (x.Count != y.Count)
+				if (x.Count() != y.Count())
 				{
 					return false;
 				}
@@ -202,7 +202,7 @@ namespace Graphs
 				return x.All(item => y.Contains(item, _equalityComparer));
 			}
 
-			public int GetHashCode(HashSet<T2> obj)
+			public int GetHashCode(IEnumerable<T2> obj)
 			{
 				return obj.GetHashCode();
 			}

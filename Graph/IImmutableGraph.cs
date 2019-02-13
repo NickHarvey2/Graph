@@ -28,6 +28,6 @@ namespace Graphs
 		/// Warning: if graph is significantly complex, this operation may take a significant amount of time
 		/// </remarks>
 		/// <returns></returns>
-		IEnumerable<IMutableGraph<T>> GetCycles();
+		IEnumerable<IImmutableGraph<T>> GetCycles();
 	}
 }
